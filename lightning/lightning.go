@@ -2,6 +2,8 @@ package lightning
 
 import (
 	"github.com/niftynei/glightning/glightning"
+	"log"
+	"os/exec"
 )
 
 // Custom wrapper to limit the scope of the lightning client
@@ -9,8 +11,19 @@ var lightning *glightning.Lightning
 
 // InitLightning initializes the lightning client
 func InitLightning(rpcPath string) {
+	cmd := exec.Command("lightningd", "--lightning-dir=/home/runner/mutinous/.lightning/", "--signet", "--disable-plugin", "bcli")
+	err := cmd.Start()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("CLN daemon started with process id %d...\n", cmd.Process.Pid)
+
 	lightning = glightning.NewLightning()
-	lightning.StartUp("lightning-rpc", rpcPath)
+	log.Println("RPC path:", rpcPath)
+	lightning.StartUp(rpcPath, "lightning-rpc")
+
+	log.Printf("Lightning client initialized...\n")
 }
 
 // CreateInvoice creates an invoice
