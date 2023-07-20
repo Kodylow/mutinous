@@ -12,12 +12,10 @@ import (
 
 var cfg *config.Config
 
-
-
 func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error loading config / .env file")
 	}
 	lightning.InitLightning(cfg.ClnRpcPath)
 	
@@ -25,6 +23,7 @@ func main() {
 
 	r.HandleFunc("/.well-known/lnurlp/{username}", handlers.LNAddressHandler)
 	r.HandleFunc("/lnurlp/{username}/callback", handlers.LNURLCallbackHandler)
+	r.HandleFunc("/lnurlp/{username}/verify/{label}", handlers.LNURLVerifyHandler)
 
 	http.ListenAndServe(":" + cfg.Port, r)
 }

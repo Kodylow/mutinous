@@ -19,16 +19,6 @@ func CreateInvoice(satoshi uint64, label string, description string) (*glightnin
 }
 
 // IsInvoicePaid checks if an invoice is paid
-func IsInvoicePaid(label string) bool {
-	invoice, err := lightning.GetInvoice(label)
-	if err != nil {
-		panic(err)
-	}
-
-	// check invoice status
-	if invoice.Status != "paid" {
-		return false
-	}
-
-	return true
+func GetInvoiceByLabel(label string) (*glightning.Invoice, error) {
+	return lightning.GetInvoice(label)
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/kodylow/mutinous/db"
 	"github.com/kodylow/mutinous/lightning"
 	"github.com/kodylow/mutinous/utils"
+	"github.com/niftynei/glightning/glightning"
 )
 
 // LNURLCallbackResponse is the response to a LNURL callback
@@ -47,16 +48,24 @@ func LNURLCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// create a label just username and a random base64 string
-	label, err := utils.GenerateLabel(username)
+	label, err := utils.GenerateLabel()
+
 	invoice, err := lightning.CreateInvoice(uint64(amount), label, utils.GetMetadata(username))
+
+	resp := buildCallbackResponse(username, invoice, label)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(resp)
+}
+
+// buildCallbackResponse builds the response to a LNURL callback
+func buildCallbackResponse(username string, invoice *glightning.Invoice, label string) *LNURLCallbackResponse {
 	resp := &LNURLCallbackResponse{
 		Status: "OK",
 	}
 	resp.SuccessAction.Tag = "message"
 	resp.SuccessAction.Message = "Walk the plank, this Mutiny's just getting started!"
-	resp.Verify = DOMAIN + "/lnurlp/" + username + "/verify/ch4Z7u3xYo5tWWSGsafLVHqZ"
+	resp.Verify = DOMAIN + "/lnurlp/" + username + "/verify/" + label
 	resp.Pr = invoice.Bolt11
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+	return resp
 }
