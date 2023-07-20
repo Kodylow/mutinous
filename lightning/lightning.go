@@ -11,6 +11,7 @@ var lightning *glightning.Lightning
 
 // InitLightning initializes the lightning client
 func InitLightning(rpcPath string) {
+	// TODO: remove hardcode here
 	cmd := exec.Command("lightningd", "--lightning-dir=/home/runner/mutinous/.lightning/", "--signet", "--disable-plugin", "bcli")
 	err := cmd.Start()
 	if err != nil {
@@ -21,7 +22,7 @@ func InitLightning(rpcPath string) {
 
 	lightning = glightning.NewLightning()
 	log.Println("RPC path:", rpcPath)
-	lightning.StartUp(rpcPath, "lightning-rpc")
+	lightning.StartUp("lightning-rpc", rpcPath)
 
 	log.Printf("Lightning client initialized...\n")
 }
@@ -33,5 +34,10 @@ func CreateInvoice(satoshi uint64, label string, description string) (*glightnin
 
 // IsInvoicePaid checks if an invoice is paid
 func GetInvoiceByLabel(label string) (*glightning.Invoice, error) {
-	return lightning.GetInvoice(label)
+	invoice, err := lightning.GetInvoice(label)
+	if err != nil {
+		log.Println("Error getting invoice:", err)
+		return nil, err
+	}
+	return invoice, nil
 }

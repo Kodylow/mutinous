@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"encoding/json"
-	"net/http"
-
 	"github.com/gorilla/mux"
 	"github.com/kodylow/mutinous/lightning"
+	"log"
+	"net/http"
 )
 
 // InvoiceStatus represents the status of a payment invoice
@@ -20,20 +20,22 @@ type InvoiceStatus struct {
 func LNURLVerifyHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	label := params["label"]
-	
+
 	// check if invoice has been paid
 	invoice, err := lightning.GetInvoiceByLabel(label)
 	if err != nil {
+		// log the error
+		log.Println("Error getting invoice:", err)
 		http.Error(w, "Error getting invoice", http.StatusInternalServerError)
 		return
 	}
 
 	if invoice.Status != "paid" {
 		response := InvoiceStatus{
-			Status:  "OK",
-			Settled: false,
+			Status:   "OK",
+			Settled:  false,
 			Preimage: "",
-			Pr:      invoice.Bolt11,
+			Pr:       invoice.Bolt11,
 		}
 
 		w.Header().Set("Content-Type", "application/json")

@@ -2,8 +2,10 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 	_ "github.com/joho/godotenv/autoload"
@@ -29,10 +31,11 @@ type LNURLCallbackResponse struct {
 func LNURLCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	username := params["username"]
-	
+	username = strings.TrimSpace(username)
+	log.Println("LNURL callback from ", username)
+    
 	// check if user exists
-	userInDB := db.UserIsInDB(username)
-	if !userInDB {
+	if !db.UserIsInDB(username) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]string{"status": "ERROR", "reason": "User is not yet Mutinous"})
 		return

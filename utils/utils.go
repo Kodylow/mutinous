@@ -19,12 +19,12 @@ func ValidateReplitUser(username string) bool {
 // GetMetadata returns the metadata
 // LNURLP requires metadata to be used as the desc hash for the invoice
 func GetMetadata(username string) string {
-	return "[[\"text/identifier\",\"" + username + "@domain.com\"],[\"text/plain\",\"Sats for " + username + "\"]]"
+	return "[[\"text/identifier\",\"" + username + "@mutinous.replit.app\"],[\"text/plain\",\"Sats for " + username + "\"]]"
 }
 
 // GenerateLabel generates a label for an invoice
 func GenerateLabel() (string, error) {
-	const n = 8
+	const n = 32
 	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"
 	ret := make([]byte, n)
 	for i := 0; i < n; i++ {
@@ -36,4 +36,3 @@ func GenerateLabel() (string, error) {
 	}
 	return string(ret), nil
 }
-

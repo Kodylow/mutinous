@@ -1,5 +1,3 @@
 package handlers
 
-import "os"
-
-var DOMAIN = os.Getenv("DOMAIN")
+var DOMAIN = "https://mutinous.replit.app"

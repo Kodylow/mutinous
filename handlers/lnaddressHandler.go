@@ -43,10 +43,8 @@ func LNAddressHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// store user in db if not exists
-	err := db.StoreUser(username)
-	if err != nil {
-		http.Error(w, "Unable to create user", http.StatusInternalServerError)
-		return
+	if !db.UserIsInDB(username) {
+		db.StoreUser(username)
 	}
 
 	resp := &LNAddressResponse{
