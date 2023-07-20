@@ -8,14 +8,14 @@ import (
 var lightning *glightning.Lightning
 
 // InitLightning initializes the lightning client
-func InitLightning() {
+func InitLightning(rpcPath string) {
 	lightning = glightning.NewLightning()
-	lightning.StartUp("lightning-rpc", "/tmp/clight-1")
+	lightning.StartUp("lightning-rpc", rpcPath)
 }
 
 // CreateInvoice creates an invoice
-func CreateInvoice(satoshi uint64, label string, description string, expiry uint32) (*glightning.Invoice, error) {
-	return lightning.CreateInvoice(satoshi, label, description, expiry, nil, "", false)
+func CreateInvoice(satoshi uint64, label string, description string) (*glightning.Invoice, error) {
+	return lightning.CreateInvoice(satoshi, label, description, 3600, nil, "", false)
 }
 
 // IsInvoicePaid checks if an invoice is paid

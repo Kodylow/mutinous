@@ -6,8 +6,10 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	_ "github.com/joho/godotenv/autoload"
 	"github.com/kodylow/mutinous/db"
 	"github.com/kodylow/mutinous/lightning"
+	"github.com/kodylow/mutinous/utils"
 )
 
 // LNURLCallbackResponse is the response to a LNURL callback
@@ -44,14 +46,15 @@ func LNURLCallbackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// grab invoice for the amount
-	invoice, err := lightning.CreateInvoice(uint64(amount), username, "Sats for "+username, 3600, nil, "", false)
+	// create a label just username and a random base64 string
+	label, err := utils.GenerateLabel(username)
+	invoice, err := lightning.CreateInvoice(uint64(amount), label, utils.GetMetadata(username))
 	resp := &LNURLCallbackResponse{
 		Status: "OK",
 	}
 	resp.SuccessAction.Tag = "message"
 	resp.SuccessAction.Message = "Walk the plank, this Mutiny's just getting started!"
-	resp.Verify = "https://getalby.com/lnurlp/" + username + "/verify/ch4Z7u3xYo5tWWSGsafLVHqZ"
+	resp.Verify = DOMAIN + "/lnurlp/" + username + "/verify/ch4Z7u3xYo5tWWSGsafLVHqZ"
 	resp.Pr = invoice.Bolt11
 
 	w.Header().Set("Content-Type", "application/json")

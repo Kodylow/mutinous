@@ -53,8 +53,8 @@ func LNAddressHandler(w http.ResponseWriter, r *http.Request) {
 		Status:         "OK",
 		Tag:            "payRequest",
 		CommentAllowed: 255,
-		Callback:       "https://domain.com/lnurlp/" + username + "/callback",
-		Metadata:       "[[\"text/identifier\",\"" + username + "@domain.com\"],[\"text/plain\",\"Sats for " + username + "\"]]",
+		Callback:       DOMAIN + "/lnurlp/" + username + "/callback",
+		Metadata:       utils.GetMetadata(username),
 		MinSendable:    1000,
 		MaxSendable:    110000,
 	}
