@@ -1,9 +1,10 @@
 package lightning
 
 import (
-	"github.com/niftynei/glightning/glightning"
 	"log"
 	"os/exec"
+
+	"github.com/elementsproject/glightning/glightning"
 )
 
 // Custom wrapper to limit the scope of the lightning client

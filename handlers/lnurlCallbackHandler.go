@@ -7,12 +7,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/elementsproject/glightning/glightning"
 	"github.com/gorilla/mux"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/kodylow/mutinous/db"
 	"github.com/kodylow/mutinous/lightning"
 	"github.com/kodylow/mutinous/utils"
-	"github.com/niftynei/glightning/glightning"
 )
 
 // LNURLCallbackResponse is the response to a LNURL callback

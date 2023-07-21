@@ -1,3 +1,4 @@
 .env
 .lightning
 db/lnaddrServer.db
+main
