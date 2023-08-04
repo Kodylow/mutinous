@@ -33,13 +33,15 @@ func LNURLCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	username := params["username"]
 	username = strings.TrimSpace(username)
 	log.Println("LNURL callback from ", username)
-    
+
 	// check if user exists
 	if !db.UserIsInDB(username) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]string{"status": "ERROR", "reason": "User is not yet Mutinous"})
 		return
 	}
+
+	log.Println("User exists...")
 
 	// check if amount is valid
 	amountStr := r.URL.Query().Get("amount")
@@ -52,8 +54,10 @@ func LNURLCallbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	// create a label just username and a random base64 string
 	label, err := utils.GenerateLabel()
-
+	log.Println("Getting invoice for label: ", label)
 	invoice, err := lightning.CreateInvoice(uint64(amount), label, utils.GetMetadata(username))
+
+	log.Println("Invoice created...")
 
 	resp := buildCallbackResponse(username, invoice, label)
 
