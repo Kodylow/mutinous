@@ -34,5 +34,5 @@ func GenerateLabel(username string) (string, error) {
 		}
 		ret[i] = letters[num.Int64()]
 	}
-	return username + "-" + string(ret), nil
+	return string(ret), nil
 }

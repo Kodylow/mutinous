@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/kodylow/mutinous/lightning"
+	db "github.com/kodylow/mutinous/db"
 	"log"
 	"net/http"
 )
@@ -20,6 +21,7 @@ type InvoiceStatus struct {
 func LNURLVerifyHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	label := params["label"]
+	username := params["username"]
 
 	// check if invoice has been paid
 	invoice, err := lightning.GetInvoiceByLabel(label)
@@ -42,7 +44,9 @@ func LNURLVerifyHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
-
+	
+	db.AddToUserBalance(username, int(invoice.AmountMilliSatoshiRaw))
+	
 	response := InvoiceStatus{
 		Status:   "OK",
 		Settled:  true,
