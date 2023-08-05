@@ -23,7 +23,7 @@ func GetMetadata(username string) string {
 }
 
 // GenerateLabel generates a label for an invoice
-func GenerateLabel() (string, error) {
+func GenerateLabel(username string) (string, error) {
 	const n = 32
 	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_"
 	ret := make([]byte, n)
@@ -34,5 +34,5 @@ func GenerateLabel() (string, error) {
 		}
 		ret[i] = letters[num.Int64()]
 	}
-	return string(ret), nil
+	return username + "-" + string(ret), nil
 }
