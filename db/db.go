@@ -78,7 +78,6 @@ func UserIsInDB(username string) bool {
 	return true
 }
 
-
 func GetUserBalance(username string) (int, error) {
 	if db == nil {
 		return 0, errors.New("Database is not initialized")

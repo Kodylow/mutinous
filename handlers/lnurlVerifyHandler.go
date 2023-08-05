@@ -3,8 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/kodylow/mutinous/lightning"
 	db "github.com/kodylow/mutinous/db"
+	"github.com/kodylow/mutinous/lightning"
 	"log"
 	"net/http"
 )
@@ -44,9 +44,9 @@ func LNURLVerifyHandler(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response)
 		return
 	}
-	
+
 	db.AddToUserBalance(username, int(invoice.AmountMilliSatoshiRaw))
-	
+
 	response := InvoiceStatus{
 		Status:   "OK",
 		Settled:  true,
