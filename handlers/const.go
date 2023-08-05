@@ -1,3 +1,3 @@
 package handlers
 
-var DOMAIN = "https://mutinous.replit.app"
+var DOMAIN = "localhost:8080"
