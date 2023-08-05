@@ -11,7 +11,7 @@ var db *sql.DB
 func InitDB() (*sql.DB, error) {
 	// TODO: remove hardcode
 	var err error
-	db, err = sql.Open("sqlite3", "/home/runner/mutinous/db/lnaddrServer.db")
+	db, err = sql.Open("sqlite3", "db/lnaddrServer.db")
 	if err != nil {
 		return nil, err
 	}

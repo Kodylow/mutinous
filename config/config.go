@@ -2,8 +2,9 @@ package config
 
 import (
 	"errors"
-	"github.com/joho/godotenv"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -14,7 +15,7 @@ type Config struct {
 }
 
 func LoadConfig() (*Config, error) {
-	err := godotenv.Load("env")
+	err := godotenv.Load(".env")
 	if err != nil {
 		return nil, err
 	}

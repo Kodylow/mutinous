@@ -1,2 +1,6 @@
 cln:
-  lightningd --lightning-dir=/home/runner/mutinous/.lightning/ --signet --disable-plugin bcli
+  lightningd --lightning-dir=.lightning/ --signet --log-level=debug --disable-plugin bcli
+alias:
+  lightning-cli --lightning-dir=.lightning/ --signet
+cln-main:
+  lightningd --lightning-dir=.lightning/ --log-level=debug --disable-plugin bcli
