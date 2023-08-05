@@ -15,7 +15,7 @@ var lightning *glightning.Lightning
 // InitLightning initializes the lightning client
 func InitLightning(rpcPath string) error {
 	// Test lightning-cli
-	cmd := exec.Command("lightning-cli", "--lightning-dir=./.lightning", "--signet", "help")
+	cmd := exec.Command("lightning-cli", "--lightning-dir=./.lightning", "--signet", "getinfo")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()

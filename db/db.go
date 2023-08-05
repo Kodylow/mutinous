@@ -94,12 +94,12 @@ func GetUserBalance(username string) (int, error) {
 	return balance, nil
 }
 
-func AddToUserBalance(username string, amount int) error {
+func AddToUserBalance(username string, msat int) error {
 	if db == nil {
 		return errors.New("Database is not initialized")
 	}
 
-	_, err := db.Exec("UPDATE users SET balance = balance + ? WHERE username = ?", amount, username)
+	_, err := db.Exec("UPDATE users SET balance = balance + ? WHERE username = ?", msat, username)
 	if err != nil {
 		log.Printf("Error when trying to add to user's balance: %v", err)
 		return err

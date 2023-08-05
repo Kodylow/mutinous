@@ -53,7 +53,7 @@ func LNURLCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// create a label just username and a random base64 string
-	label, err := utils.GenerateLabel()
+	label, err := utils.GenerateLabel(username)
 	log.Println("Getting invoice for label: ", label)
 	invoice, err := lightning.CreateInvoice(uint64(amount), label, utils.GetMetadata(username))
 

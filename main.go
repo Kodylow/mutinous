@@ -52,6 +52,7 @@ func main() {
 	r.HandleFunc("/.well-known/lnurlp/{username}", handlers.LNAddressHandler)
 	r.HandleFunc("/lnurlp/{username}/callback", handlers.LNURLCallbackHandler)
 	r.HandleFunc("/lnurlp/{username}/verify/{label}", handlers.LNURLVerifyHandler)
+	r.HandleFunc("/local/invoicePaid", handlers.InvoicePaidHandler).Methods("POST")
 	r.HandleFunc("/", ReadmeHandler) // added readme handler for index
 
 	log.Println("Starting server on " + cfg.Port + "...")
