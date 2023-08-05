@@ -37,7 +37,7 @@ func OnInvoicePaid(paymentEvent *glightning.InvoicePaymentEvent) (*glightning.In
 		return nil, err
 	}
 
-	resp, err := http.Post("http://localhost:8080/invoicePaid", "application/json", bytes.NewBuffer(jsonData))
+	resp, err := http.Post("http://localhost:8080/local/invoicePaid", "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
 		log.Println("Failed to notify main app:", err)
 		return nil, err
@@ -45,7 +45,7 @@ func OnInvoicePaid(paymentEvent *glightning.InvoicePaymentEvent) (*glightning.In
 	defer resp.Body.Close()
 
 	log.Println("Successfully notified main app")
-	return nil, nil
+	return paymentEvent.Continue(), nil
 }
 
 func registerHooks(p *glightning.Plugin) {

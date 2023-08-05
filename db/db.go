@@ -67,13 +67,17 @@ func UserIsInDB(username string) bool {
 	var existingUser User
 	err := db.QueryRow("SELECT * FROM users WHERE username = ?", username).Scan(&existingUser.Username, &existingUser.Balance)
 
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false // <-- User not found, return false
+		}
 		log.Println("Error when trying to check if user exists:", err)
 		return false
 	}
 
 	return true
 }
+
 
 func GetUserBalance(username string) (int, error) {
 	if db == nil {

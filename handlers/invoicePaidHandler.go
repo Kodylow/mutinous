@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"log"
+	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -17,38 +18,52 @@ type Payment struct {
 }
 
 func InvoicePaidHandler(w http.ResponseWriter, r *http.Request) {
-	// Verify the request is from localhost
-	if r.RemoteAddr != "127.0.0.1:8080" && r.RemoteAddr != "localhost:8080" { // Replace PORT with the actual port your server listens to
+	host, port, err := net.SplitHostPort(r.RemoteAddr)
+	log.Println("Host:", host, "\nPort:", port)
+	if err != nil {
+		http.Error(w, "Forbidden", http.StatusForbidden)
+		return
+	}
+
+	if host != "127.0.0.1" && host != "::1" && host != "localhost" {
 		http.Error(w, "Forbidden", http.StatusForbidden)
 		return
 	}
 
 	var paymentDetails Payment // Define a struct for the expected payment details
 
-	err := json.NewDecoder(r.Body).Decode(&paymentDetails)
+	err = json.NewDecoder(r.Body).Decode(&paymentDetails)
 	if err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		log.Printf("Error decoding JSON: %s", err) // <--- Add detailed log here
+		http.Error(w, "Bad Request 1", http.StatusBadRequest)
 		return
 	}
 
 	// Parse off username from label "username-invoiceID"
-	username := strings.Split(paymentDetails.Label, "-")[0]
-
+	username := strings.TrimSpace(strings.Split(paymentDetails.Label, "-")[0])
+	log.Println("Username:", username)
 	// Get the user from the database
 	yes := db.UserIsInDB(username)
 	if !yes {
-		http.Error(w, "User not found", http.StatusNotFound)
-		return
+		// User not found, add them to the database with a balance of 0
+		err := db.StoreUser(username)
+		if err != nil {
+			log.Printf("Error storing new user: %v", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
 	}
 
 	// Add the payment millisatoshi amount to the user's balance, need to convert to int
 	msat, err := strconv.Atoi(paymentDetails.MilliSatoshis)
 	if err != nil {
+		log.Printf("Error converting MilliSatoshis to int: %s", err) // <--- Add detailed log here
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
 	userBalance, err := db.GetUserBalance(username)
 	if err != nil {
+		log.Println("Error finding user in DB: ", err)
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
@@ -58,6 +73,7 @@ func InvoicePaidHandler(w http.ResponseWriter, r *http.Request) {
 
 	userBalance, err = db.GetUserBalance(username)
 	if err != nil {
+		log.Printf("Error retrieving user balance: %s", err) // <--- Add detailed log here
 		http.Error(w, "Bad Request", http.StatusBadRequest)
 		return
 	}
