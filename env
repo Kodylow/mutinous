@@ -1,4 +1,4 @@
-DOMAIN=https://mutinous
-DB_PATH=./LNAddressServer.db
+DOMAIN=https://mutinynet.app
+DB_PATH=./lnaddrServer.db
 PORT=8080
-CLN_RPC_PATH=/home/runner/mutinous/.lightning/signet/
+CLN_RPC_PATH=/root/mutinous/.lightning/signet/

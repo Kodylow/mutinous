@@ -1,3 +1,3 @@
 package handlers
 
-var DOMAIN = "localhost:8080"
+var DOMAIN = "https://mutinynet.app"

@@ -3,13 +3,13 @@
 Mutinous provides mutinynet lightning addresses based off your Replit username. 
 
 ```
-replitusername@mutinous.replit.app
+replitusername@mutinynet.app
 ```
 
 You can try it by first hitting a GET against:
 
 ```
-https://mutinous.replit.app/.well-known/lnurlp/replitusername
+https://mutinynet.app/.well-known/lnurlp/replitusername
 
 Returns:
 
@@ -17,7 +17,7 @@ Returns:
   "status": "OK",
   "tag": "payRequest",
   "commentAllowed": 255,
-  "callback": "http://localhost:8080/lnurlp/kody/callback",
+  "callback": "http://mutinynet.app/lnurlp/kody/callback",
   "metadata": "[[\"text/identifier\",\"kody@domain.com\"],[\"text/plain\",\"Sats for kody\"]]",
   "minSendable": 1000,
   "maxSendable": 110000,
